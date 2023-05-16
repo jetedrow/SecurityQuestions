@@ -11,8 +11,10 @@ using SecurityQuestions.Features;
 var serviceProvider = new ServiceCollection()
     .AddSingleton<AppCore>()
     .AddScoped<MediatrLoader>()
-    .AddDbContext<QuestionContext>(cfg => cfg.UseSqlite("Data Source=app.db;Version=3;"))
+    .AddDbContext<QuestionContext>(cfg => cfg.UseSqlite("Data Source=app.db;"))
     .AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<MediatrLoader>())
     .BuildServiceProvider();
+
+await serviceProvider.GetRequiredService<QuestionContext>().Database.MigrateAsync();
 
 serviceProvider.GetRequiredService<AppCore>().Run();

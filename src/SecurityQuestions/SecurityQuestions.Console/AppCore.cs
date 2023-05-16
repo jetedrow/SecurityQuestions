@@ -1,11 +1,14 @@
-﻿using Spectre.Console;
+﻿using SecurityQuestions.Data;
+using Spectre.Console;
 using System.Net.Security;
 
 namespace SecurityQuestions.Console;
 
 public class AppCore
 {
-    public AppCore() { }
+    public AppCore()
+    {
+    }
 
     public enum FlowResult
     {
@@ -43,7 +46,7 @@ public class AppCore
     public FlowResult NameFlow()
     {
         var name = AnsiConsole.Ask<string>("Hi, what is your name?");
-        //if (name == "Jeff") return FlowResult.StoreFlow;
+
         return FlowResult.NameFlow;
     }
 
