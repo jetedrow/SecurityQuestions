@@ -45,7 +45,7 @@ namespace SecurityQuestions.Features.QuestionStore
 
             context.Users.Add(newUser);
 
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync(cancellationToken);
 
         }
     }

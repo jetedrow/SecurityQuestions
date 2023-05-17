@@ -16,6 +16,7 @@ namespace SecurityQuestions.Data
 
         public DbSet<SecurityQuestion> SecurityQuestions { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

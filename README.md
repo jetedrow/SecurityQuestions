@@ -3,11 +3,15 @@ An *over-engineered* console app that stores security questions for a specified 
 several design patterns and libraries to separate concerns, and allow for a more usable and testable
 application that can be built upon and expanded.
 
+This software utilizes patterns that would be more suitable for enterprise software, but they are
+being illustrated here as an example.  Normally, a problem of this size would not warrant such a
+complex communication layer with 
+
 ## Design Patterns
 - **Dependency Injection**
-	- The application utilizes a DI stack to inject libraries and other common services that are used
+	- The application utilizes a simple DI stack to inject libraries and other common services that are used
 	througout the application.
-- **Mediator Pattern**
+- **Mediator Pattern (CQRS)**
 	- The application uses the mediator pattern (via the MediatR library) to separate concerns of
 	business logic (back-end work) and presentation.
 	- This pattern allows for each "feature" to be independently tested and verified.
@@ -17,7 +21,8 @@ application that can be built upon and expanded.
 	- As discussed above, this library enables the use of the mediator pattern (CQRS) to separate concerns.
 - **[Spectre.Console](https://github.com/spectreconsole/spectre.console)**
 	- This helper library allows for a great user experience while interacting with a console
-	application.
+	application, allowing for more interactivity for user choices, which expands on the original
+	reqirements.
 - **EntityFrameworkCore**
 	- Using EF Core 7 for data persistance.
 	- Utilizing code-first migrations to deploy schema changes to the database.

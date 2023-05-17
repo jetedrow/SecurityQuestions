@@ -27,7 +27,8 @@ public class AppCore
     public async Task RunAsync()
     {
         FlowResult currentFlow = FlowResult.NameFlow;
-        string currentName = string.Empty;
+        ICollection<UserQuestion> userQuestions = new List<UserQuestion>();
+        string currentName = String.Empty;
 
         //TODO: Add an exit condition so the application can close gracefully.
         while (true)
@@ -35,13 +36,13 @@ public class AppCore
             switch (currentFlow)
             {
                 case FlowResult.NameFlow:
-                    (currentFlow, currentName) = await NameFlow();
+                    (currentFlow, currentName, userQuestions) = await NameFlow();
                     break;
                 case FlowResult.StoreFlow:
                     currentFlow = await StoreFlow(currentName);
                     break;
                 case FlowResult.AnswerFlow:
-                    currentFlow = await AnswerFlow(currentName);
+                    currentFlow = await AnswerFlow(userQuestions);
                     break;
                 default:
                     currentFlow = FlowResult.NameFlow;
@@ -50,8 +51,10 @@ public class AppCore
         }
     }
 
-    public async Task<(FlowResult, string Name)> NameFlow()
+    public async Task<(FlowResult, string Name, ICollection<UserQuestion> userQuestions)> NameFlow()
     {
+        AnsiConsole.Clear();
+
         var name = AnsiConsole.Ask<string>("Hi, what is your name?");
 
         var availableQuestions = await mediator.Send(new RetrieveQuestionsByNameRequest { Name = name });
@@ -59,15 +62,15 @@ public class AppCore
         if (!availableQuestions.Any())
         {
             // No questions available for user, or user not entered.  Prompt to store questions for user.
-            return (FlowResult.StoreFlow, name);
+            return (FlowResult.StoreFlow, name, availableQuestions);
         }
 
         if (AnsiConsole.Confirm("Do you want to answer a security question?"))
         {
-            return (FlowResult.AnswerFlow, name);
+            return (FlowResult.AnswerFlow, name, availableQuestions);
         }
 
-        return (FlowResult.StoreFlow, name);
+        return (FlowResult.StoreFlow, name, availableQuestions);
     }
 
     public async Task<FlowResult> StoreFlow(string name)
@@ -87,6 +90,12 @@ public class AppCore
                 .HighlightStyle(new Style (Color.Yellow))
                 .PageSize(8)
                 );
+
+            // If they chose 0 questions, we assume they do not want to answer any of them.
+            if (!questions.Any())
+            {
+                return FlowResult.NameFlow;
+            }
 
             if (questions.Count < 3)
             {
@@ -125,10 +134,35 @@ public class AppCore
         return FlowResult.NameFlow;
     }
 
-    public async Task<FlowResult> AnswerFlow(string name)
+    public static async Task<FlowResult> AnswerFlow(ICollection<UserQuestion> userQuestions)
     {
         await Task.Yield();
 
+        foreach (var userQuestion in userQuestions)
+        {
+            if (userQuestion.QuestionText is not null && userQuestion.Answer is not null)
+            {
+                var userAnswer = AnsiConsole.Ask<string>(userQuestion.QuestionText);
+                if (userAnswer.ToLower() == userQuestion.Answer.ToLower()) 
+                {
+                    // Our answer matches!
+                    AnsiConsole.MarkupLine("\n[green]Congratulations! You answered the question correctly![/]");
+                    AnsiConsole.Write("\nPress <enter> to continue...");
+                    System.Console.ReadLine();
+                    return FlowResult.NameFlow;
+                }
+                else
+                {
+                    // No match.
+                    AnsiConsole.MarkupLine("[red]Sorry, this answer is incorrect![/]\n");
+                }
+            }
+        }
+        // We have tried all configured questions, let the user know they ran out of questions.
+        AnsiConsole.MarkupLine("[red]You have run out of questions to answer, please try again later.[/]");
+        AnsiConsole.Write("\nPress <enter> to continue...");
+        System.Console.ReadLine();
         return FlowResult.NameFlow;
+
     }
 }
