@@ -8,6 +8,6 @@ namespace SecurityQuestions.Models
     {
         public int SecurityQuestionId { get; set; }
 
-        public string? QuestionText { get; set; }
+        public string QuestionText { get; set; }
     }
 }

@@ -17,4 +17,4 @@ var serviceProvider = new ServiceCollection()
 
 await serviceProvider.GetRequiredService<QuestionContext>().Database.MigrateAsync();
 
-serviceProvider.GetRequiredService<AppCore>().Run();
+await serviceProvider.GetRequiredService<AppCore>().RunAsync();

@@ -8,11 +8,13 @@ namespace SecurityQuestions.Models
     {
         public int UserId { get; set; }
 
+        public User User { get; set; }
+
         public int SecurityQuestionId { get; set; }
 
-        public SecurityQuestion? Question { get; set; }
+        public SecurityQuestion Question { get; set; }
 
-        public string? Answer { get; set; }
+        public string Answer { get; set; }
 
     }
 }

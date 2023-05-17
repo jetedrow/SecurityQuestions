@@ -14,7 +14,7 @@ application that can be built upon and expanded.
 
 ## Libraries
 - **[MediatR](https://github.com/jbogard/MediatR)**
-	- As discussed above, this library enables the use of the mediator pattern to separate concerns.
+	- As discussed above, this library enables the use of the mediator pattern (CQRS) to separate concerns.
 - **[Spectre.Console](https://github.com/spectreconsole/spectre.console)**
 	- This helper library allows for a great user experience while interacting with a console
 	application.
@@ -33,3 +33,6 @@ as encryption and/or data masking to ensure security concerns are addressed for 
 information shared in the application.
 - An end state should be entered into the flows as well, to allow for a clean exit of the application
 in the future.
+- Instead of re-doing the answers as required, it may be a better flow in the future to allow the user
+to add/change their selections, and update selections they have already answered vs. completely
+re-doing the store flow.

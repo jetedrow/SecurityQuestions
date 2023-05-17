@@ -8,8 +8,8 @@ namespace SecurityQuestions.Models
     {
         public int UserId { get; set; }
 
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
-        public ICollection<UserQuestion>? Questions { get; set; }
+        public ICollection<UserQuestion> Questions { get; set; }
     }
 }
