@@ -30,7 +30,7 @@ namespace SecurityQuestions.Features.Answer
             var userData = await context.Users
                 .Include(u => u.Questions)
                 .ThenInclude(q => q.Question)
-                .FirstOrDefaultAsync(u => u.Name == request.Name.ToLower(), cancellationToken: cancellationToken);
+                .FirstOrDefaultAsync(u => u.Name.ToLower() == request.Name.ToLower(), cancellationToken: cancellationToken);
 
             return userData?.Questions?
                 .Select(q => new UserQuestion(q.Question.QuestionText, q.Answer)).ToList() ?? Enumerable.Empty<UserQuestion>().ToList();

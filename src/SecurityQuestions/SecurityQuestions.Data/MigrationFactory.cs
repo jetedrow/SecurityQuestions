@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Data.Sqlite;
 
 namespace SecurityQuestions.Data
 {
@@ -12,8 +13,15 @@ namespace SecurityQuestions.Data
     {
         public QuestionContext CreateDbContext(string[] args)
         {
+            var dbName = ":memory:";
+
+            if (args.Length > 0) dbName = args[0];
+
+            var persistantConnection = new SqliteConnection($"Data Source={dbName};");
+            persistantConnection.Open();
+
             var optionsBuilder = new DbContextOptionsBuilder<QuestionContext>();
-                optionsBuilder.UseSqlite("Data Source=:memory:;New=True;");
+                optionsBuilder.UseSqlite(persistantConnection);
 
             return new QuestionContext(optionsBuilder.Options);
         }

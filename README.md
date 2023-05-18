@@ -30,6 +30,8 @@ complex communication layer with
 
 ## Improvements
 There are several places this code could be improved in the future.
+- Adding additonal input sanitation for lengths of inputs (based on configured data lengths) should
+be added to ensure data is not truncated when storing answers.
 - A repository pattern could also be established and injected so the logic of the data is further
 abstracted from the features layer, if data layer communication becomes more complex.
 - This current code uses the SQLite provider for ease of build and portability.  If this were to be
